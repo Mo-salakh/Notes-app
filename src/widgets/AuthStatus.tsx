@@ -16,7 +16,7 @@ export function AuthStatus() {
 
     return (
         <>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{mt:'80px', textAlign:'right'}}>
 
                 {isSigned ? <>Добро пожаловать, {user?.name} <Button sx={{backgroundColor:'#FFFF', ml:'10px', height:'30px', textTransform:'none'}} variant="outlined" color="error" onClick={getOut}>Выйти</Button></> :
                     <>Вы не вошли в систему <Button sx={{backgroundColor:'#FFFF', ml:'10px', height:'30px', textTransform:'none'}} variant="outlined" color="success" onClick={handleClick} >Войти</Button> </>

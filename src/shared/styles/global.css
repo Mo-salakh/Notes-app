@@ -38,3 +38,9 @@
 .note_title::first-letter {
     text-transform: uppercase;
 }
+
+.text_empty {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 500;
+}

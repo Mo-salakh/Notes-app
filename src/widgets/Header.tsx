@@ -1,29 +1,31 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+    AppBar,
+    Box,
+    IconButton,
+    Toolbar,
+    Typography,
+} from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
-import SearchIcon from '@mui/icons-material/Search';
-import { useAuthContext } from "../app/provider/store/AuthContext";
-import { AuthStatus } from "./AuthStatus";
+import { useAuthContext } from '../app/provider/store/AuthContext';
+import { SearchNote } from '../shared/components/SearchNote';
 
 export function Header() {
+    const { setMenuOpen } = useAuthContext();
 
-    const { setMenuOpen } = useAuthContext()
-
-    return(
-        <Box sx={{flexGrow: 1}}>
+    return (
+        <Box sx={{ flexGrow: 1 }}>
             <AppBar>
                 <Toolbar>
-                    <IconButton color="inherit" onClick={() => setMenuOpen(true)}>
+                    <IconButton
+                        color="inherit"
+                        onClick={() => setMenuOpen(true)}
+                    >
                         <NotesIcon />
                     </IconButton>
-                    <Typography sx={{flexGrow: 1}}>
-                        Notes
-                    </Typography>
-                    <IconButton size="large" aria-label="search" color="inherit">
-                        <SearchIcon />
-                    </IconButton>
-                    <AuthStatus />
+                    <Typography sx={{ flexGrow: 1 }}>Notes</Typography>
+                    <SearchNote />
                 </Toolbar>
             </AppBar>
         </Box>
-    )
+    );
 }

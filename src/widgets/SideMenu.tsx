@@ -40,7 +40,7 @@ export function SideMenu() {
                     notes.map((note) => (
                         <ListItem
                             key={note.id}
-                            sx={ activeNote?.id === note.id && {border: '1px solid #c4c4c4'} }
+                            sx={activeNote?.id === note.id ? { border: '1px solid #c4c4c4' } : undefined}
                             onClick={() => setActiveNoteId(note.id)}
                         >
                             <ListItemText

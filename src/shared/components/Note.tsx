@@ -5,7 +5,7 @@ export function Note() {
     const { activeNote, updateNote } = useNotesContext();
 
     if (!activeNote) {
-        return <p>Выберите или создайте заметку.</p>;
+        return <p className='text_empty'>Выберите или создайте заметку.</p>;
     }
 
     const handleChange = (
