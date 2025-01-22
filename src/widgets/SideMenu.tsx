@@ -15,10 +15,12 @@ import CloseIcon from '@mui/icons-material/Close';
 
 export function SideMenu() {
     const { menuOpen, setMenuOpen } = useAuthContext();
-    const { notes, createNote, activeNote, setActiveNoteId, deleteNote } = useNotesContext();
+    const { notes, createNote, activeNote, setActiveNoteId, setShowDeleteAlert, setToDeleteItemId } = useNotesContext();
+    
 
     return (
-        <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)}>
+        <>
+            <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)}>
             <List sx={{ width: '250px' }}>
                 <ListItem>
                     <ListItemText primary="Заметки" />
@@ -54,7 +56,8 @@ export function SideMenu() {
                             <ListItemIcon>
                                 <IconButton onClick={(e) => {
                                     e.stopPropagation();
-                                    deleteNote(note.id)
+                                    setToDeleteItemId(note.id);
+                                    setShowDeleteAlert(true)
                                 }}>
                                     <CloseIcon fontSize='small' />
                                 </IconButton>
@@ -63,6 +66,7 @@ export function SideMenu() {
                     ))
                 )}
             </List>
-        </Drawer>
+            </Drawer>  
+        </>
     );
 }

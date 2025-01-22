@@ -14,6 +14,10 @@ interface NotesContextType {
     createNote: () => void;
     updateNote: (id: number, updatedFields: Partial<Note>) => void;
     deleteNote: (id: number) => void
+    showDeleteAlert: boolean
+    setShowDeleteAlert: React.Dispatch<React.SetStateAction<boolean>>
+    toDeleteItemId: number
+    setToDeleteItemId: React.Dispatch<React.SetStateAction<number>>
 }
 
 const NotesContext = createContext<NotesContextType | undefined>(undefined);
@@ -21,6 +25,8 @@ const NotesContext = createContext<NotesContextType | undefined>(undefined);
 export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [notes, setNotes] = useState<Note[]>([]);
     const [activeNoteId, setActiveNoteId] = useState<number | null>(null);
+    const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false)
+    const [toDeleteItemId, setToDeleteItemId] = useState<number>(0)
 
     const activeNote = activeNoteId
         ? notes.find((note) => note.id === activeNoteId) || null
@@ -58,7 +64,11 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 setActiveNoteId,
                 createNote,
                 updateNote,
-                deleteNote
+                deleteNote,
+                showDeleteAlert,
+                setShowDeleteAlert,
+                toDeleteItemId,
+                setToDeleteItemId
             }}
         >
             {children}
