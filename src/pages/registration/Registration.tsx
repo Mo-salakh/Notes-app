@@ -1,6 +1,6 @@
-import { Button, TextField, Container } from "@mui/material";
+import { Button, TextField, Container, Typography } from "@mui/material";
 import { useAuthContext } from "../../app/provider/store/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Registration() {
 
@@ -61,6 +61,11 @@ export function Registration() {
                         Регистрация
                     </Button>
                 </form>
+                <Typography variant="body1" sx={{textAlign:"center", mt:1}}>
+                        <Link to={'/auth'}>
+                            Уже зарегистрированы?
+                        </Link>
+                </Typography>
             </Container>
         </>
     );

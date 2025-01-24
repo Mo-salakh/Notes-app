@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from "firebase/auth";
+
 
 export interface UserInterface {
     name: string;
@@ -15,9 +17,8 @@ interface inputsValidation {
 interface appProps {
     menuOpen: boolean;
     setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    user: UserInterface | null;
-    setUser: React.Dispatch<React.SetStateAction<UserInterface | null>>;
-    regUser: (newUser: UserInterface) => void;
+    userEmail: string | null;
+    setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
     isSigned: 'true' | 'false' | null;
     setSigned: React.Dispatch<React.SetStateAction<'true' | 'false'>>;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>, type: string, onSuccess: () => void) => void;
@@ -34,10 +35,11 @@ export const AuthContext = createContext<appProps | null>(null);
 export function AuthContextProvider({ children }: contextProp) {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const [notes, setNotes] = useState<['']>(['']);
-    const [user, setUser] = useState<UserInterface | null>(() => {
-        const localedValue = localStorage.getItem('user')
+    const [userEmail, setUserEmail] = useState<string | null>(() => {
+        const localedValue = localStorage.getItem('userEmail')
         return localedValue ? JSON.parse(localedValue) : null
     });
+
     const [isValid, setValid] = useState<inputsValidation>({
         nameValid: true,
         emailValid: true,
@@ -49,18 +51,12 @@ export function AuthContextProvider({ children }: contextProp) {
     });
 
     useEffect(() => {
-        if(user && isSigned) {
-            localStorage.setItem('user', JSON.stringify(user))
+        if(isSigned) {
+            localStorage.setItem('userEmail', JSON.stringify(userEmail))
             localStorage.setItem('isSigned', JSON.stringify(isSigned) )
         }
-    }, [user, isSigned]);
+    }, [userEmail, isSigned]);
  
-    function regUser(newUser: UserInterface): void {
-        if (newUser) {
-            setUser(newUser);
-            setSigned('true');
-        }
-    }
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>, type: string, onSuccess: () => void) {
         e.preventDefault();
@@ -68,32 +64,37 @@ export function AuthContextProvider({ children }: contextProp) {
         const emailValue = email.value;
         const passwordValue = password.value;
         const nameValue = nickname?.value;
-        
+        const auth = getAuth();
+
         if (type === 'login') {
-            if (user?.email === emailValue && user?.password === passwordValue) {
+            signInWithEmailAndPassword(auth, emailValue, passwordValue)
+            .then(({user}) => {
+                setUserEmail(user.email)
                 setSigned('true');
-                console.log(user);
                 onSuccess()
-            } else {
-                alert('Ошибка! Неправильно ввели почту или пароль');
-            }
+            })
+            .catch((error) => {
+                console.log(error)
+            });
         } else if (type === 'registration') {
             if(!isCorrect(emailValue, 'email') || !isCorrect(nameValue, 'name') || !isCorrect(passwordValue, 'password')) {
                 return console.error('Ошибка! Неправильно указали данные.')
             }
-
-            onSuccess()
-            regUser({
-                name: nameValue,
-                email: emailValue,
-                password: passwordValue
+            createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+            .then(({user}) => {
+              setUserEmail(user.email)
+              onSuccess()
+              setSigned('true');
+            })
+            .catch((error) => {
+              console.log(error)
             });
         }
     }
 
     function isCorrect(data: string, type: 'email' | 'name' | 'password'): boolean {
         if(type === 'name') {
-            if (data.length <= 2 || data === user?.name) {
+            if (data.length <= 2) {
                 setValid((prevState) => ({ ...prevState, nameValid: false }))
                 return false
             } else {
@@ -103,7 +104,7 @@ export function AuthContextProvider({ children }: contextProp) {
         }
         if(type === 'email') {
             const emailRegex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(data) || data === user?.email) {
+            if (!emailRegex.test(data)) {
                 setValid((prevState) => ({ ...prevState, emailValid: false }))
                 return false
             } else {
@@ -128,9 +129,8 @@ export function AuthContextProvider({ children }: contextProp) {
         setMenuOpen,
         notes,
         setNotes,
-        user,
-        setUser,
-        regUser,
+        userEmail,
+        setUserEmail,
         isSigned,
         setSigned,
         handleSubmit,
