@@ -9,5 +9,4 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_APP_FIREBASE_APP_ID,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);

@@ -75,6 +75,7 @@ export function AuthContextProvider({ children }: contextProp) {
             })
             .catch((error) => {
                 console.log(error)
+                alert('Ошибка, неправильно ввели логин или пароль')
             });
         } else if (type === 'registration') {
             if(!isCorrect(emailValue, 'email') || !isCorrect(nameValue, 'name') || !isCorrect(passwordValue, 'password')) {
