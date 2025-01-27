@@ -1,0 +1,1 @@
+import{u as r,r as s,j as e}from"./index-DJkQADIP.js";import{A as o,a as i}from"./AlertTitle-BwX6e9Ze.js";function u(){const t=r();return s.useEffect(()=>{setTimeout(()=>{t(-1)},4e3)},[]),e.jsxs(o,{sx:{textAlign:"center"},severity:"error",children:[e.jsx(i,{children:"Ошибка 404"}),"Страница не найдена :/"]})}export{u as NotFound};
